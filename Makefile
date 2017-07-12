@@ -38,12 +38,30 @@ $(BUILD_DIR)/%.c.o: %.c
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	#
 
+# Convenience options
+
+OVERLAY ?= B4-PRU-Example
+
+build-overlay :
+	dtc -O dtb -o overlay/$(OVERLAY)-00A0.dtbo -b 0 -@ overlay/$(OVERLAY).dts
+
+unbuild-overlay :
+	dtc -O dts -o overlay/$(OVERLAY).dts -b 0 -@ overlay/$(OVERLAY)-00A0.dtbo
+
+copy-overlay :
+	cp overlay/$(OVERLAY)-00A0.dtbo /lib/firmware
+
+DEST ?= bbbw
+push :
+	scp -r * $(DEST):~/Projects/b4lib/
 
 .PHONY: clean
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+	$(RM) -r overlay/$(OVERLAY)-00A0.dtbo
 
 -include $(DEPS)
 
