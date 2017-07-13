@@ -1,0 +1,12 @@
+--- Using the PRU ---
+
+- 2017-07-12
+    -from the debian 8.7 IoT image, need to compile and enable the 4.4_lts kernel
+    ( instead of ti's)
+
+    cd /opt/scripts/tools
+    git pull
+    ./update_kernel.sh --bone-kernel --lts-4_4
+
+    - then modprobe uio_pruss
+    - capes and code as usual

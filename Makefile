@@ -14,7 +14,7 @@ INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 
-CPPFLAGS ?= $(INC_FLAGS) -fpermissive -O2
+CPPFLAGS ?= $(INC_FLAGS) -fpermissive -O2 -lprussdrv
 
 all : $(BUILD_DIR)/$(TARGET_EXEC)
 
@@ -52,6 +52,9 @@ unbuild-overlay :
 
 copy-overlay :
 	cp overlay/$(OVERLAY)-00A0.dtbo /lib/firmware
+
+load-overlay :
+	sudo sh -c "echo $(OVERLAY) > $(SLOTS)"
 
 DEST ?= bbbw
 push :
