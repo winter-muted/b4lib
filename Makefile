@@ -3,10 +3,11 @@ TARGET_EXEC ?= b4lib
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src ./lib
 
-CC = g++
+CC = gcc
 CXX = g++
+AS = pasm
 
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.p)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
@@ -15,6 +16,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 
 CPPFLAGS ?= $(INC_FLAGS) -fpermissive -O2 -lprussdrv
+ASFLAGS = -b
 
 all : $(BUILD_DIR)/$(TARGET_EXEC)
 
