@@ -57,6 +57,7 @@ copy-overlay :
 
 load-overlay :
 	sudo sh -c "echo $(OVERLAY) > $(SLOTS)"
+	sudo modprobe uio_pruss
 
 DEST ?= bbbw
 push :
