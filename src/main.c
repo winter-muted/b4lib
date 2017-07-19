@@ -2,7 +2,7 @@
 #include <pruss_intc_mapping.h>
 #include <prussdrv.h>
 #include <stdio.h>
-#define PRU_NUM 0
+#define PRU_NUM 1
 
 #ifdef DEBUG
 #define D(x) x
@@ -27,7 +27,7 @@ int main() {
   prussdrv_pruintc_init(&pruss_intc_initdata);
 
   D(printf("Execute program\n");)
-  prussdrv_exec_program(PRU_NUM, "./I2CPRU.bin");
+  prussdrv_exec_program(PRU_NUM, "./pru-uart.bin");
 
   D(printf("Wait for return\n");)
   int n = prussdrv_pru_wait_event(PRU_EVTOUT_0);

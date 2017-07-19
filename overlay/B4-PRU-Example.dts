@@ -1,50 +1,47 @@
+/* Device Tree Overlay for enabling the pins that are used in Chapter 13
+* This overlay is based on the BB-PRU-01 overlay
+* Written by Derek Molloy for the book "Exploring BeagleBone: Tools and
+* Techniques for Building with Embedded Linux" by John Wiley & Sons, 2014
+* ISBN 9781118935125. Please see the file README.md in the repository root
+* directory for copyright and GNU GPLv3 license information.
+*/
 /dts-v1/;
+/plugin/;
 
 / {
-	compatible = "ti,beaglebone", "ti,beaglebone-black";
-	part-number = "B3-PRU-Example";
-	version = "00A0";
-	exclusive-use = "P9.27", "P9.28", "pru0";
+   compatible = "ti,beaglebone", "ti,beaglebone-black";
 
-	fragment@0 {
-		target = <0xdeadbeef>;
+   part-number = "B4-PRU-Example";
+   version = "00A0";
 
-		__overlay__ {
+   /* This overlay uses the following resources */
+   exclusive-use =
+				"P9.17", "P9.18", "pru1";
 
-			pinmux_pru_pru_pins {
-				pinctrl-single,pins = <0x1a4 0x15 0x194 0x15>;
-				linux,phandle = <0x1>;
-				phandle = <0x1>;
-			};
-		};
-	};
 
-	fragment@1 {
-		target = <0xdeadbeef>;
+   fragment@0 {
+      target = <&am33xx_pinmux>;
+      __overlay__ {
 
-		__overlay__ {
-			status = "okay";
-			pinctrl-names = "default";
-			pinctrl-0 = <0x1>;
-		};
-	};
+         pru_pru_pins: pinmux_pru_pru_pins {   // The PRU pin modes
+            pinctrl-single,pins = <
 
-	__symbols__ {
-		pru_pru_pins = "/fragment@0/__overlay__/pinmux_pru_pru_pins";
-	};
+							0x15c 0x34		// pr1_uart0 tx, output fast slew pull up disable mux 4
+							0x158 0x74		// pr1_uar0 rx, input fast slew pull up mux 4
 
-	__local_fixups__ {
+            >;
+         };
+      };
+   };
 
-		fragment@1 {
+   fragment@1 {         // Enable the PRUSS
+      target = <&pruss>;
+      __overlay__ {
+         status = "okay";
+         pinctrl-names = "default";
+         pinctrl-0 = <&pru_pru_pins>;
+      };
+   };
 
-			__overlay__ {
-				pinctrl-0 = <0x0>;
-			};
-		};
-	};
 
-	__fixups__ {
-		am33xx_pinmux = "/fragment@0:target:0";
-		pruss = "/fragment@1:target:0";
-	};
 };

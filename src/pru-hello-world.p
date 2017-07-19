@@ -9,6 +9,11 @@
 #define PRU_EVTOUT_0 3                // event number sent back
 
 START:
+  mov r0,0x00002000
+  mov r3, r31
+  sbbo r3,r0,4,4
+
+  mov r1,65535
   set   r30.t5        // set bit 5 of output pin high
   mov   r0,DELAY      // set delay counter to full
 DELAYON:
@@ -20,7 +25,9 @@ LEDOFF:
 DELAYOFF:
   sub   r0,r0,1
   qbne  DELAYOFF,r0,0 // continue looping until r0 = 0
-  qbbc  START,r31.t3  // if button pressed, done
+  // qbbc  START,r31.t3  // if button pressed, done
+  sub r1,r1,1
+  qbeq END,r1,0
 END:
   mov   r31.b0,PRU0_R31_VEC_VALID | PRU_EVTOUT_0  // notify of program completion
   halt
